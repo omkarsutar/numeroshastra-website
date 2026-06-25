@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "numeroshastra-web": {
+    "numeroshastra-website": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "numeroshastra-web:build:production"
+              "buildTarget": "numeroshastra-website:build:production"
             },
             "development": {
-              "buildTarget": "numeroshastra-web:build:development"
+              "buildTarget": "numeroshastra-website:build:development"
             }
           },
           "defaultConfiguration": "development"
