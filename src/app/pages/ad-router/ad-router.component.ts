@@ -19,56 +19,32 @@ export class AdRouterComponent implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.route.queryParams.subscribe((rawParams) => {
+      this.route.queryParams.subscribe(async (rawParams) => {
+        try {
+          // Point directly to the root public deployment directory asset folder path
+          const pathString = '/js/universal-router-sdk.js';
+          const module = await import(/* @import-ignore */ pathString);
 
-        // 1. Create a native HTML script node element
-        const scriptElement = document.createElement('script');
+          const routerInstance = new module.UniversalAppRouter({
+            brandName: "Numero Shastra",
+            pixelId: "YOUR_META_PIXEL_ID",
+            android: {
+              packageId: "com.numeroshastra.client"
+            },
+            ios: {
+              pwaUrl: "https://app.numeroshastra.com"
+            },
+            fallbackUrl: "https://numeroshastra.com"
+          });
 
-        // 2. Direct absolute asset path lookup string
-        scriptElement.src = './assets/js/universal-router-sdk.js';
-        scriptElement.type = 'text/javascript';
-        scriptElement.async = true;
-
-        // 3. Define action logic immediately when file finishes loading onto the screen
-        scriptElement.onload = () => {
-          try {
-            // Read class blueprint reference from either window attachment or modern module layer
-            const RouterClass = (window as any).UniversalAppRouter;
-
-            if (RouterClass) {
-              const routerInstance = new RouterClass({
-                brandName: "Numero Shastra",
-                pixelId: "YOUR_META_PIXEL_ID",
-                android: {
-                  packageId: "com.numeroshastra.client"
-                },
-                ios: {
-                  pwaUrl: "https://app.numeroshastra.com"
-                },
-                fallbackUrl: "https://numeroshastra.com"
-              });
-
-              routerInstance.executeRouting(rawParams);
-            } else {
-              throw new Error("SDK loaded successfully but failed to register the UniversalAppRouter global scope wrapper.");
-            }
-          } catch (error: any) {
-            this.showVisualCrash(error);
-          }
-        };
-
-        // Handle structural asset delivery errors (like a 404 network drop)
-        scriptElement.onerror = (errorEvent) => {
-          this.showVisualCrash(new Error("Network layer failed to retrieve the SDK file from /assets/js/ directory."));
-        };
-
-        // 4. Inject the script element right into the document head layout space to execute
-        document.head.appendChild(scriptElement);
+          routerInstance.executeRouting(rawParams);
+        } catch (error: any) {
+          this.showVisualCrash(error);
+        }
       });
     }
   }
 
-  // Diagnostic error layout overlay block
   private showVisualCrash(error: any): void {
     console.error("Redirection routing fallback trace:", error);
     const errorBanner = document.createElement('div');
@@ -76,10 +52,11 @@ export class AdRouterComponent implements OnInit {
     errorBanner.innerHTML = `<h4>Routing Crash Log:</h4><p>${error?.message || error}</p>`;
     document.body.appendChild(errorBanner);
 
-    // Kept commented out for remote visibility confirmation
+    // Kept commented out for direct live visual verification on your phone
     // window.location.href = "https://numeroshastra.com";
   }
 }
+
 
 
 
