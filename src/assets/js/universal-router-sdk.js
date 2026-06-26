@@ -66,7 +66,7 @@ export class UniversalAppRouter {
         if (this.config.android.customUrl) {
             return this._appendParamsToUrl(this.config.android.customUrl, extractedParams);
         }
-        const base = `https://google.com{this.config.android.packageId}`;
+        const base = `https://play.google.com/store/apps/details?id=${this.config.android.packageId}`;
         if (Object.keys(extractedParams).length === 0) return base;
 
         const referrerPairs = [];
