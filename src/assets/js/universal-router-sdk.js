@@ -2,7 +2,7 @@
  * Universal Multi-Brand Smart Routing & Tracking SDK
  * Dynamically handles device detection, cross-platform routing, and parameter injection.
  */
-export class UniversalAppRouter {
+class UniversalAppRouter {
     /**
      * Initializes structural routes and configuration details for a brand profile.
      * @param {Object} options - Configuration parameters for the specific application.
@@ -69,12 +69,11 @@ export class UniversalAppRouter {
         const base = `https://play.google.com/store/apps/details?id=${this.config.android.packageId}`;
         if (Object.keys(extractedParams).length === 0) return base;
 
-        const referrerPairs = [];
+        const referrerParams = new URLSearchParams();
         for (const [k, v] of Object.entries(extractedParams)) {
-            referrerPairs.push(`${k}=${v}`);
+            referrerParams.append(k, v);
         }
-        const referrerQueryString = referrerPairs.join('&');
-        return `${base}&referrer=${encodeURIComponent(referrerQueryString)}`;
+        return `${base}&referrer=${encodeURIComponent(referrerParams.toString())}`;
     }
 
     /**
@@ -89,7 +88,6 @@ export class UniversalAppRouter {
             }
             return url.toString();
         } catch (e) {
-            // Safe string fallback concatenation if a raw relative path string is provided
             const separator = baseUrl.includes('?') ? '&' : '?';
             const queryArray = Object.entries(params).map(([k, v]) => `${k}=${v}`);
             return `${baseUrl}${separator}${queryArray.join('&')}`;
@@ -118,8 +116,7 @@ export class UniversalAppRouter {
             targetUrl = this._appendParamsToUrl(this.config.fallbackUrl, params);
         }
 
-        // Fire Meta Pixel tracking call if script initialization exists on the window object
-        // Pure, native JavaScript syntax
+        // Fire Meta Pixel tracking call safely
         if (this.config.pixelId && typeof window !== 'undefined' && window.fbq) {
             window.fbq('track', 'ViewContent', {
                 brand_name: this.config.brandName,
@@ -127,7 +124,6 @@ export class UniversalAppRouter {
                 campaign: params.utm_campaign || 'untracked'
             });
         }
-
 
         // Forward the client browser
         setTimeout(() => {
@@ -137,3 +133,11 @@ export class UniversalAppRouter {
         }, this.config.redirectDelay);
     }
 }
+
+// Global window exposure for universal accessibility on non-module frameworks (PHP, HTML, WordPress)
+if (typeof window !== 'undefined') {
+    window.UniversalAppRouter = UniversalAppRouter;
+}
+
+// Named export mapping for module bundlers (Angular, React, Vite)
+export { UniversalAppRouter };

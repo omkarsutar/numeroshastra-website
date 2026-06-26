@@ -1,12 +1,14 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-ad-router',
-  template: `<div style="text-align:center; font-family:sans-serif; margin-top:20%;">
-               <h2>Opening Numero Shastra...</h2>
-             </div>`,
+  template: `
+    <div style="text-align:center; font-family:sans-serif; margin-top:20%;">
+      <h2>Opening Numero Shastra...</h2>
+    </div>
+  `,
   standalone: true
 })
 export class AdRouterComponent implements OnInit {
@@ -19,15 +21,20 @@ export class AdRouterComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.route.queryParams.subscribe(async (rawParams) => {
         try {
-          // Point dynamically to your clean asset folder path location string
+          // Angular assets folder loading target
           const pathString = '../../../assets/js/universal-router-sdk.js';
           const module = await import(/* @import-ignore */ pathString);
 
+          // Instantiate safely via standard export mapping
           const routerInstance = new module.UniversalAppRouter({
             brandName: "Numero Shastra",
             pixelId: "YOUR_META_PIXEL_ID",
-            android: { packageId: "com.numeroshastra.client" },
-            ios: { pwaUrl: "https://app.numeroshastra.com" },
+            android: {
+              packageId: "com.numeroshastra.client"
+            },
+            ios: {
+              pwaUrl: "https://app.numeroshastra.com"
+            },
             fallbackUrl: "https://numeroshastra.com"
           });
 
@@ -40,6 +47,7 @@ export class AdRouterComponent implements OnInit {
     }
   }
 }
+
 
 
 
