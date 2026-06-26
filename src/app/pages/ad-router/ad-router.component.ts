@@ -2,6 +2,9 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
+// Tell TypeScript that UniversalAppRouter exists globally on the window context
+declare var UniversalAppRouter: any;
+
 @Component({
   selector: 'app-ad-router',
   template: `
@@ -19,35 +22,45 @@ export class AdRouterComponent implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.route.queryParams.subscribe(async (rawParams) => {
+      this.route.queryParams.subscribe((rawParams) => {
         try {
-          // Angular assets folder loading target
-          // const pathString = '../../../assets/js/universal-router-sdk.js';
-          const pathString = '/assets/js/universal-router-sdk.js';
-          const module = await import(/* @import-ignore */ pathString);
+          // Check if the script loaded onto the window successfully
+          if (typeof UniversalAppRouter !== 'undefined') {
+            const routerInstance = new UniversalAppRouter({
+              brandName: "Numero Shastra",
+              pixelId: "YOUR_META_PIXEL_ID",
+              android: {
+                packageId: "com.numeroshastra.client"
+              },
+              ios: {
+                pwaUrl: "https://app.numeroshastra.com"
+              },
+              fallbackUrl: "https://numeroshastra.com"
+            });
 
-          // Instantiate safely via standard export mapping
-          const routerInstance = new module.UniversalAppRouter({
-            brandName: "Numero Shastra",
-            pixelId: "YOUR_META_PIXEL_ID",
-            android: {
-              packageId: "com.numeroshastra.client"
-            },
-            ios: {
-              pwaUrl: "https://app.numeroshastra.com"
-            },
-            fallbackUrl: "https://numeroshastra.com"
-          });
-
-          routerInstance.executeRouting(rawParams);
-        } catch (error) {
+            routerInstance.executeRouting(rawParams);
+          } else {
+            throw new Error("UniversalAppRouter SDK script was not loaded on the window context.");
+          }
+        } catch (error: any) {
           console.error("Redirection routing fallback trace:", error);
-          window.location.href = "https://numeroshastra.com";
+
+          // Create an overlay so you can read the exact crash message on your phone screen
+          const errorBanner = document.createElement('div');
+          errorBanner.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;padding:25px;z-index:99999;font-family:monospace;word-break:break-all;';
+
+          // Safely reading properties using the 'any' type definition
+          errorBanner.innerHTML = `<h4>Routing Crash Log:</h4><p>${error?.message || error}</p>`;
+          document.body.appendChild(errorBanner);
+
+          // Comment out the redirect line temporarily so the error stays on the screen!
+          // window.location.href = "https://numeroshastra.com";
         }
       });
     }
   }
 }
+
 
 
 
