@@ -31,6 +31,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/support/support.component').then(m => m.SupportComponent)
   },
   {
+    path: 'lnk',
+    loadComponent: () => import('./pages/ad-router/ad-router.component').then(m => m.AdRouterComponent)
+  },
+  {
     path: '**',
     redirectTo: 'home'
   }
