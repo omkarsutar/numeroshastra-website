@@ -27,9 +27,6 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [
-              "src/assets/js/universal-router-sdk.js"
-            ],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {

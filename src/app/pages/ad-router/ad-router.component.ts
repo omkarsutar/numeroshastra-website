@@ -2,9 +2,6 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
-// Tell TypeScript that UniversalAppRouter exists globally on the window context
-declare var UniversalAppRouter: any;
-
 @Component({
   selector: 'app-ad-router',
   template: `
@@ -23,43 +20,67 @@ export class AdRouterComponent implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.route.queryParams.subscribe((rawParams) => {
-        try {
-          // Check if the script loaded onto the window successfully
-          if (typeof UniversalAppRouter !== 'undefined') {
-            const routerInstance = new UniversalAppRouter({
-              brandName: "Numero Shastra",
-              pixelId: "YOUR_META_PIXEL_ID",
-              android: {
-                packageId: "com.numeroshastra.client"
-              },
-              ios: {
-                pwaUrl: "https://app.numeroshastra.com"
-              },
-              fallbackUrl: "https://numeroshastra.com"
-            });
 
-            routerInstance.executeRouting(rawParams);
-          } else {
-            throw new Error("UniversalAppRouter SDK script was not loaded on the window context.");
+        // 1. Create a native HTML script node element
+        const scriptElement = document.createElement('script');
+
+        // 2. Direct absolute asset path lookup string
+        scriptElement.src = './assets/js/universal-router-sdk.js';
+        scriptElement.type = 'text/javascript';
+        scriptElement.async = true;
+
+        // 3. Define action logic immediately when file finishes loading onto the screen
+        scriptElement.onload = () => {
+          try {
+            // Read class blueprint reference from either window attachment or modern module layer
+            const RouterClass = (window as any).UniversalAppRouter;
+
+            if (RouterClass) {
+              const routerInstance = new RouterClass({
+                brandName: "Numero Shastra",
+                pixelId: "YOUR_META_PIXEL_ID",
+                android: {
+                  packageId: "com.numeroshastra.client"
+                },
+                ios: {
+                  pwaUrl: "https://app.numeroshastra.com"
+                },
+                fallbackUrl: "https://numeroshastra.com"
+              });
+
+              routerInstance.executeRouting(rawParams);
+            } else {
+              throw new Error("SDK loaded successfully but failed to register the UniversalAppRouter global scope wrapper.");
+            }
+          } catch (error: any) {
+            this.showVisualCrash(error);
           }
-        } catch (error: any) {
-          console.error("Redirection routing fallback trace:", error);
+        };
 
-          // Create an overlay so you can read the exact crash message on your phone screen
-          const errorBanner = document.createElement('div');
-          errorBanner.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;padding:25px;z-index:99999;font-family:monospace;word-break:break-all;';
+        // Handle structural asset delivery errors (like a 404 network drop)
+        scriptElement.onerror = (errorEvent) => {
+          this.showVisualCrash(new Error("Network layer failed to retrieve the SDK file from /assets/js/ directory."));
+        };
 
-          // Safely reading properties using the 'any' type definition
-          errorBanner.innerHTML = `<h4>Routing Crash Log:</h4><p>${error?.message || error}</p>`;
-          document.body.appendChild(errorBanner);
-
-          // Comment out the redirect line temporarily so the error stays on the screen!
-          // window.location.href = "https://numeroshastra.com";
-        }
+        // 4. Inject the script element right into the document head layout space to execute
+        document.head.appendChild(scriptElement);
       });
     }
   }
+
+  // Diagnostic error layout overlay block
+  private showVisualCrash(error: any): void {
+    console.error("Redirection routing fallback trace:", error);
+    const errorBanner = document.createElement('div');
+    errorBanner.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;padding:25px;z-index:99999;font-family:monospace;word-break:break-all;';
+    errorBanner.innerHTML = `<h4>Routing Crash Log:</h4><p>${error?.message || error}</p>`;
+    document.body.appendChild(errorBanner);
+
+    // Kept commented out for remote visibility confirmation
+    // window.location.href = "https://numeroshastra.com";
+  }
 }
+
 
 
 
