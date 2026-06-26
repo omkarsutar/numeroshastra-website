@@ -22,7 +22,8 @@ export class AdRouterComponent implements OnInit {
       this.route.queryParams.subscribe(async (rawParams) => {
         try {
           // Angular assets folder loading target
-          const pathString = '../../../assets/js/universal-router-sdk.js';
+          // const pathString = '../../../assets/js/universal-router-sdk.js';
+          const pathString = '/assets/js/universal-router-sdk.js';
           const module = await import(/* @import-ignore */ pathString);
 
           // Instantiate safely via standard export mapping
