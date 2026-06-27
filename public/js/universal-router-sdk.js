@@ -20,7 +20,7 @@ class UniversalAppRouter {
             },
             fallbackUrl: options.fallbackUrl || "https://google.com",
             pixelId: options.pixelId || null,
-            redirectDelay: options.redirectDelay !== undefined ? options.redirectDelay : 400,
+            redirectDelay: options.redirectDelay !== undefined ? options.redirectDelay : 1000,
             paramMapping: options.paramMapping || {
                 utm_source: 'utm_source',
                 utm_campaign: 'utm_campaign',
@@ -108,13 +108,19 @@ class UniversalAppRouter {
             if (this.config.ios.pwaUrl) {
                 targetUrl = this._appendParamsToUrl(this.config.ios.pwaUrl, params);
             } else if (this.config.ios.appStoreId) {
-                targetUrl = `https://apple.com{this.config.ios.appStoreId}`;
+                targetUrl = `https://apps.apple.com/app/id${this.config.ios.appStoreId}`;
             } else {
                 targetUrl = this._appendParamsToUrl(this.config.fallbackUrl, params);
             }
         } else {
             targetUrl = this._appendParamsToUrl(this.config.fallbackUrl, params);
         }
+
+        const performRedirect = () => {
+            if (typeof window !== 'undefined') {
+                window.location.href = targetUrl;
+            }
+        };
 
         // Fire Meta Pixel tracking call safely
         if (this.config.pixelId && typeof window !== 'undefined') {
@@ -138,22 +144,37 @@ class UniversalAppRouter {
                 }
             }
 
-            // 2. Fire direct background fetch beacon request with keepalive: true to ensure the event hits Meta's server
-            // even if a fast redirect (400ms) unloads the page before fbevents.js is loaded/sent.
+            // 2. Dispatch network beacon and only redirect once complete (or safety timeout reached)
+            let redirected = false;
+            let safetyTimeout = null;
+
+            const done = () => {
+                if (!redirected) {
+                    redirected = true;
+                    if (safetyTimeout) {
+                        clearTimeout(safetyTimeout);
+                    }
+                    performRedirect();
+                }
+            };
+
+            // Safety fallback timeout to ensure user redirects even if request hangs or is blocked
+            safetyTimeout = setTimeout(done, this.config.redirectDelay);
+
             if (typeof fetch === 'function') {
-                fetch(trUrl, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
+                fetch(trUrl, { method: 'GET', mode: 'no-cors', keepalive: true })
+                    .then(done)
+                    .catch(done);
             } else {
                 const img = new Image();
+                img.onload = done;
+                img.onerror = done;
                 img.src = trUrl;
             }
+        } else {
+            // No tracking needed, redirect immediately
+            performRedirect();
         }
-
-        // Forward the client browser
-        setTimeout(() => {
-            if (typeof window !== 'undefined') {
-                window.location.href = targetUrl;
-            }
-        }, this.config.redirectDelay);
     }
 }
 
