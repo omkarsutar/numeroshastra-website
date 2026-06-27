@@ -27,7 +27,7 @@ export class AdRouterComponent implements OnInit {
 
           const routerInstance = new module.UniversalAppRouter({
             brandName: "Numero Shastra",
-            pixelId: "YOUR_META_PIXEL_ID",
+            pixelId: "829652682594365",
             android: {
               packageId: "com.numeroshastra.client"
             },
