@@ -37,7 +37,8 @@ class UniversalAppRouter {
         if (navigator.userAgentData && navigator.userAgentData.platform) {
             const platform = navigator.userAgentData.platform.toLowerCase();
             if (platform.includes("android")) return "android";
-            if (platform.includes("ios") || platform.includes("macos")) return "ios";
+            if (platform.includes("ios") || platform.includes("iphone") || platform.includes("ipad")) return "ios";
+            if (platform.includes("windows") || platform.includes("macos") || platform.includes("linux")) return "desktop";
         }
         const userAgent = (navigator.userAgent || navigator.vendor || window.opera).toLowerCase();
         if (/android/i.test(userAgent)) return "android";
@@ -129,7 +130,7 @@ class UniversalAppRouter {
             const deviceDetected = encodeURIComponent(device);
             const campaign = encodeURIComponent(params.utm_campaign || 'untracked');
             const ts = Date.now();
-            const trUrl = `https://www.facebook.com/tr/?id=${pixelId}&ev=ViewContent&cd[brand_name]=${brandName}&cd[device_detected]=${deviceDetected}&cd[campaign]=${campaign}&noscript=1&ts=${ts}`;
+            const trUrl = `https://www.facebook.com/tr?id=${pixelId}&ev=ViewContent&cd[brand_name]=${brandName}&cd[device_detected]=${deviceDetected}&cd[campaign]=${campaign}&noscript=1&ts=${ts}`;
 
             // 1. Fire standard window.fbq call if initialized on the page
             if (window.fbq) {
