@@ -117,12 +117,35 @@ class UniversalAppRouter {
         }
 
         // Fire Meta Pixel tracking call safely
-        if (this.config.pixelId && typeof window !== 'undefined' && window.fbq) {
-            window.fbq('track', 'ViewContent', {
-                brand_name: this.config.brandName,
-                device_detected: device,
-                campaign: params.utm_campaign || 'untracked'
-            });
+        if (this.config.pixelId && typeof window !== 'undefined') {
+            const pixelId = this.config.pixelId;
+            const brandName = encodeURIComponent(this.config.brandName);
+            const deviceDetected = encodeURIComponent(device);
+            const campaign = encodeURIComponent(params.utm_campaign || 'untracked');
+            const ts = Date.now();
+            const trUrl = `https://www.facebook.com/tr/?id=${pixelId}&ev=ViewContent&cd[brand_name]=${brandName}&cd[device_detected]=${deviceDetected}&cd[campaign]=${campaign}&noscript=1&ts=${ts}`;
+
+            // 1. Fire standard window.fbq call if initialized on the page
+            if (window.fbq) {
+                try {
+                    window.fbq('track', 'ViewContent', {
+                        brand_name: this.config.brandName,
+                        device_detected: device,
+                        campaign: params.utm_campaign || 'untracked'
+                    });
+                } catch (e) {
+                    console.error("Meta Pixel fbq error:", e);
+                }
+            }
+
+            // 2. Fire direct background fetch beacon request with keepalive: true to ensure the event hits Meta's server
+            // even if a fast redirect (400ms) unloads the page before fbevents.js is loaded/sent.
+            if (typeof fetch === 'function') {
+                fetch(trUrl, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
+            } else {
+                const img = new Image();
+                img.src = trUrl;
+            }
         }
 
         // Forward the client browser

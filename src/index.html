@@ -39,11 +39,12 @@
       window.addEventListener('DOMContentLoaded', () => {
         const scriptElement = document.createElement('script');
         scriptElement.async = true;
-        scriptElement.src = 'https://connect.facebook.net';
+        scriptElement.src = 'https://connect.facebook.net/en_US/fbevents.js';
         document.head.appendChild(scriptElement);
 
         // Pass your real Meta Pixel tracking property ID here
         fbq('init', '1944589032861359');
+        fbq('track', 'PageView');
       });
     }
   </script>
