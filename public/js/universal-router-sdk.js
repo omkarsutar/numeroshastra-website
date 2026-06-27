@@ -123,59 +123,42 @@ class UniversalAppRouter {
             }
         };
 
-        // Fire Meta Pixel tracking call safely
+        // Enforce clean official tracking pipeline integration 
         if (this.config.pixelId && typeof window !== 'undefined') {
-            const pixelId = this.config.pixelId;
-            const brandName = encodeURIComponent(this.config.brandName);
-            const deviceDetected = encodeURIComponent(device);
-            const campaign = encodeURIComponent(params.utm_campaign || 'untracked');
-            const ts = Date.now();
-            const trUrl = `https://www.facebook.com/tr?id=${pixelId}&ev=ViewContent&cd[brand_name]=${brandName}&cd[device_detected]=${deviceDetected}&cd[campaign]=${campaign}&noscript=1&ts=${ts}`;
 
-            // 1. Fire standard window.fbq call if initialized on the page
-            if (window.fbq) {
-                try {
-                    window.fbq('track', 'ViewContent', {
-                        brand_name: this.config.brandName,
-                        device_detected: device,
-                        campaign: params.utm_campaign || 'untracked'
-                    });
-                } catch (e) {
-                    console.error("Meta Pixel fbq error:", e);
-                }
+            // Fix SPA Race: Force load official fbq execution queue if missing on this path route
+            if (!window.fbq) {
+                window.fbq = function () {
+                    (window.fbq.q = window.fbq.q || []).push(arguments);
+                };
+                window._fbq = window._fbq || window.fbq;
+                window.fbq.loaded = true;
+                window.fbq.version = '2.0';
+                window.fbq.queue = [];
+
+                const scriptElement = document.createElement('script');
+                scriptElement.async = true;
+                scriptElement.src = 'https://connect.facebook.net';
+                document.head.appendChild(scriptElement);
             }
 
-            // 2. Dispatch network beacon and only redirect once complete (or safety timeout reached)
-            let redirected = false;
-            let safetyTimeout = null;
+            // Always call init to link this route instance to your explicit target asset ID
+            window.fbq('init', this.config.pixelId);
 
-            const done = () => {
-                if (!redirected) {
-                    redirected = true;
-                    if (safetyTimeout) {
-                        clearTimeout(safetyTimeout);
-                    }
-                    performRedirect();
-                }
-            };
-
-            // Safety fallback timeout to ensure user redirects even if request hangs or is blocked
-            safetyTimeout = setTimeout(done, this.config.redirectDelay);
-
-            if (typeof fetch === 'function') {
-                fetch(trUrl, { method: 'GET', mode: 'no-cors', keepalive: true })
-                    .then(done)
-                    .catch(done);
-            } else {
-                const img = new Image();
-                img.onload = done;
-                img.onerror = done;
-                img.src = trUrl;
+            // Execute clean official conversion tracking
+            try {
+                window.fbq('track', 'ViewContent', {
+                    brand_name: this.config.brandName,
+                    device_detected: device,
+                    campaign: params.utm_campaign || 'untracked'
+                });
+            } catch (e) {
+                console.error("Meta Pixel core SDK exception tracker log:", e);
             }
-        } else {
-            // No tracking needed, redirect immediately
-            performRedirect();
         }
+
+        // Forward the client window frame cleanly after the set delay window
+        setTimeout(performRedirect, this.config.redirectDelay || 1000);
     }
 }
 
