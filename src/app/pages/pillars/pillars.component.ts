@@ -32,7 +32,7 @@ import { CommonModule } from '@angular/common';
           <p>Get instant access to your 12 pillars report inside the mobile app today.</p>
         </div>
         <div class="footer-cta-action">
-          <a href="https://play.google.com" target="_blank" class="btn-gold">
+          <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold">
             <i class="fab fa-google-play"></i> Get Started For Free
           </a>
         </div>

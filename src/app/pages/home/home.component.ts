@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
             Discover your true purpose, hidden strengths, and future path with the power of ancient Numerology and the Lo Shu Grid.
           </p>
           <div class="hero-actions">
-            <a href="https://play.google.com" target="_blank" class="btn-gold pulsing-border">
+            <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold pulsing-border">
               <i class="fab fa-google-play"></i> Download App
             </a>
             <a routerLink="/detailed-analysis" class="btn-outline">
