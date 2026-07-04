@@ -42,6 +42,9 @@ import { CommonModule } from '@angular/common';
             <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold">
               <i class="fab fa-google-play"></i> Get It on Google Play
             </a>
+            <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
+              <i class="fas fa-globe"></i> Web App
+            </a>
           </div>
         </div>
       </section>
@@ -154,6 +157,8 @@ import { CommonModule } from '@angular/common';
     .store-buttons {
       display: flex;
       justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
   `]
 })

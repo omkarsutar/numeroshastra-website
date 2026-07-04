@@ -20,6 +20,9 @@ import { CommonModule } from '@angular/common';
             <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold pulsing-border">
               <i class="fab fa-google-play"></i> Download App
             </a>
+            <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
+              <i class="fas fa-globe"></i> Web App
+            </a>
             <a routerLink="/detailed-analysis" class="btn-outline">
               Explore 12 Pillars
             </a>

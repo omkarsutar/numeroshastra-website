@@ -35,6 +35,9 @@ import { CommonModule } from '@angular/common';
           <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold">
             <i class="fab fa-google-play"></i> Get Started For Free
           </a>
+          <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
+            <i class="fas fa-globe"></i> Web App
+          </a>
         </div>
       </div>
     </div>
@@ -150,6 +153,14 @@ import { CommonModule } from '@angular/common';
     .footer-cta-content p {
       color: var(--text-muted);
       font-size: 1.05rem;
+    }
+
+    .footer-cta-action {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     @media (max-width: 768px) {

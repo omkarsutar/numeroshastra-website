@@ -217,6 +217,17 @@
   font-size: 0.95rem;
 }
 
+.footer-download-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.footer-download-buttons .btn-outline {
+  align-self: flex-start;
+}
+
 .store-badge {
   display: inline-flex;
   background: rgba(255, 255, 255, 0.02);
