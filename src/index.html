@@ -48,41 +48,30 @@
       const TRACK_URL = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
 
       function trackWebsiteVisit() {
-        // Capture the full landing URL so the backend can parse all campaign data.
         const currentUrlString = window.location.href;
-        const payload = JSON.stringify({
-          referrer_raw: currentUrlString
-        });
-
-        // Beacon is more reliable on mobile when the browser is about to navigate away.
-        if (navigator.sendBeacon) {
-          const beaconSent = navigator.sendBeacon(
-            TRACK_URL,
-            new Blob([payload], { type: 'application/json' })
-          );
-
-          if (beaconSent) {
-            return;
-          }
-        }
-
         fetch(TRACK_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: payload,
+          body: JSON.stringify({
+            referrer_raw: currentUrlString
+          }),
+          mode: 'cors',
+          credentials: 'omit',
           keepalive: true
         })
           .then(response => response.json())
           .catch(error => console.error('Tracker encountered network layout fault:', error));
       }
 
-      // Execute tracking logic as soon as the document is ready, not after all assets finish loading.
-      if (document.readyState !== 'loading') {
-        trackWebsiteVisit();
-      } else {
+      // Execute tracking logic immediately, then again once the DOM is ready if needed.
+      trackWebsiteVisit();
+
+      if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', trackWebsiteVisit, { once: true });
+      } else if (document.readyState === 'interactive') {
+        trackWebsiteVisit();
       }
     })();
   </script>

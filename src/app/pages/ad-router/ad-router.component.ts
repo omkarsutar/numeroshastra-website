@@ -12,6 +12,8 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true
 })
 export class AdRouterComponent implements OnInit {
+  private readonly trackUrl = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
+
   constructor(
     private route: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -21,6 +23,8 @@ export class AdRouterComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.route.queryParams.subscribe(async (rawParams) => {
         try {
+          this.trackLandingVisit();
+
           // Point directly to the root public deployment directory asset folder path
           const pathString = '/js/universal-router-sdk.js';
           const module = await import(/* @import-ignore */ pathString);
@@ -54,6 +58,25 @@ export class AdRouterComponent implements OnInit {
 
     // Kept commented out for direct live visual verification on your phone
     // window.location.href = "https://numeroshastra.com";
+  }
+
+  private trackLandingVisit(): void {
+    const payload = JSON.stringify({
+      referrer_raw: window.location.href
+    });
+
+    fetch(this.trackUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: payload,
+      mode: 'cors',
+      credentials: 'omit',
+      keepalive: true
+    }).catch(error => {
+      console.error('Tracker encountered network layout fault:', error);
+    });
   }
 }
 
