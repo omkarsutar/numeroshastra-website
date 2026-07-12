@@ -13,7 +13,8 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AdRouterComponent implements OnInit {
   private readonly trackUrl = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
-  private readonly trackFlag = '__ns_lnk_track_sent__';
+  private readonly trackStateKey = '__ns_track_visit_state__';
+  private readonly trackStateWindowMs = 15000;
 
   constructor(
     private route: ActivatedRoute,
@@ -62,11 +63,11 @@ export class AdRouterComponent implements OnInit {
   }
 
   private trackLandingVisit(): void {
-    if ((window as any)[this.trackFlag]) {
+    if (this.hasRecentTrackState()) {
       return;
     }
 
-    (window as any)[this.trackFlag] = true;
+    this.markTrackedVisit();
 
     const payload = JSON.stringify({
       referrer_raw: window.location.href
@@ -84,6 +85,35 @@ export class AdRouterComponent implements OnInit {
     }).catch(error => {
       console.error('Tracker encountered network layout fault:', error);
     });
+  }
+
+  private hasRecentTrackState(): boolean {
+    try {
+      const rawState = sessionStorage.getItem(this.trackStateKey);
+      if (!rawState) {
+        return false;
+      }
+
+      const parsedState = JSON.parse(rawState);
+      if (!parsedState || typeof parsedState.ts !== 'number') {
+        return false;
+      }
+
+      return Date.now() - parsedState.ts <= this.trackStateWindowMs;
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  private markTrackedVisit(): void {
+    try {
+      sessionStorage.setItem(this.trackStateKey, JSON.stringify({
+        ts: Date.now(),
+        url: window.location.href
+      }));
+    } catch (_error) {
+      // Session storage can be unavailable; the fetch still continues.
+    }
   }
 }
 

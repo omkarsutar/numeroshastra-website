@@ -46,14 +46,48 @@
     (function () {
       // Configuration Endpoint
       const TRACK_URL = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
-      const TRACK_FLAG = '__ns_track_sent__';
+      const TRACK_STATE_KEY = '__ns_track_visit_state__';
+      const TRACK_STATE_WINDOW_MS = 15000;
+
+      function getRecentTrackState() {
+        try {
+          const rawState = sessionStorage.getItem(TRACK_STATE_KEY);
+          if (!rawState) {
+            return null;
+          }
+
+          const parsedState = JSON.parse(rawState);
+          if (!parsedState || typeof parsedState.ts !== 'number') {
+            return null;
+          }
+
+          if (Date.now() - parsedState.ts > TRACK_STATE_WINDOW_MS) {
+            return null;
+          }
+
+          return parsedState;
+        } catch (_error) {
+          return null;
+        }
+      }
+
+      function markTrackedVisit() {
+        try {
+          sessionStorage.setItem(TRACK_STATE_KEY, JSON.stringify({
+            ts: Date.now(),
+            url: window.location.href
+          }));
+        } catch (_error) {
+          // Session storage can be unavailable in private modes; tracking still proceeds.
+        }
+      }
 
       function trackWebsiteVisit() {
-        if (window.location.pathname === '/lnk' || window[TRACK_FLAG]) {
+        if (window.location.pathname === '/lnk' || getRecentTrackState()) {
           return;
         }
 
-        window[TRACK_FLAG] = true;
+        markTrackedVisit();
         const currentUrlString = window.location.href;
         fetch(TRACK_URL, {
           method: 'POST',
