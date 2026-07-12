@@ -30,7 +30,7 @@
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () {
         n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
       };
       if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
       n.queue = []; t = b.createElement(e); t.async = !0;
@@ -42,6 +42,37 @@
     fbq('track', 'PageView');
   </script>
   <!-- End Meta Pixel Code -->
+  <script>
+    (function () {
+      // Configuration Endpoint
+      const TRACK_URL = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
+
+      function trackWebsiteVisit() {
+        // Pulls the current active window URL containing tracking rules
+        const currentUrlString = window.location.search || window.location.href;
+
+        fetch(TRACK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            referrer_raw: currentUrlString
+          })
+        })
+          .then(response => response.json())
+          .catch(error => console.error('Tracker encountered network layout fault:', error));
+      }
+
+      // Execute tracking logic immediately when page opens
+      if (document.readyState === 'complete') {
+        trackWebsiteVisit();
+      } else {
+        window.addEventListener('load', trackWebsiteVisit);
+      }
+    })();
+  </script>
+
 </head>
 
 <body>
