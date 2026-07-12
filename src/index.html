@@ -46,8 +46,14 @@
     (function () {
       // Configuration Endpoint
       const TRACK_URL = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
+      const TRACK_FLAG = '__ns_track_sent__';
 
       function trackWebsiteVisit() {
+        if (window.location.pathname === '/lnk' || window[TRACK_FLAG]) {
+          return;
+        }
+
+        window[TRACK_FLAG] = true;
         const currentUrlString = window.location.href;
         fetch(TRACK_URL, {
           method: 'POST',
@@ -65,14 +71,8 @@
           .catch(error => console.error('Tracker encountered network layout fault:', error));
       }
 
-      // Execute tracking logic immediately, then again once the DOM is ready if needed.
+      // Execute tracking logic once per page load.
       trackWebsiteVisit();
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', trackWebsiteVisit, { once: true });
-      } else if (document.readyState === 'interactive') {
-        trackWebsiteVisit();
-      }
     })();
   </script>
 

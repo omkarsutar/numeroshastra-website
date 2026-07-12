@@ -13,6 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AdRouterComponent implements OnInit {
   private readonly trackUrl = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
+  private readonly trackFlag = '__ns_lnk_track_sent__';
 
   constructor(
     private route: ActivatedRoute,
@@ -61,6 +62,12 @@ export class AdRouterComponent implements OnInit {
   }
 
   private trackLandingVisit(): void {
+    if ((window as any)[this.trackFlag]) {
+      return;
+    }
+
+    (window as any)[this.trackFlag] = true;
+
     const payload = JSON.stringify({
       referrer_raw: window.location.href
     });
