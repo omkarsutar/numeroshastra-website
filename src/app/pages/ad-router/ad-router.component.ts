@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AdRouterComponent implements OnInit {
   private readonly trackUrl = 'https://toogplqvzycbngfzsutb.supabase.co/functions/v1/track-web-visit';
-  private readonly trackStateKey = '__ns_track_visit_state__';
+  private readonly trackStateKey = '__track_visit_state__';
   private readonly trackStateWindowMs = 15000;
 
   constructor(
