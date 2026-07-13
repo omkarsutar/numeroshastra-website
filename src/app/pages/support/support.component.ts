@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-support',
@@ -9,39 +10,37 @@ import { FormsModule } from '@angular/forms';
   template: `
     <div class="support-container container">
       <div class="section-header text-center">
-        <span class="section-subtitle">Help Center</span>
-        <h1 class="section-title">We're Here to <span class="text-gold">Help</span></h1>
-        <p class="section-desc">
-          Have questions about your numerology analysis, your grid calculation, or need technical support with the app? Get in touch with our team.
-        </p>
+        <span class="section-subtitle">{{ t('support.sectionSubtitle') }}</span>
+        <h1 class="section-title">{{ t('support.sectionTitle') }}</h1>
+        <p class="section-desc">{{ t('support.sectionDescription') }}</p>
       </div>
 
       <div class="support-grid">
         <!-- Contact Form -->
         <div class="form-card glass-panel">
-          <h3>Send Us a Message</h3>
+          <h3>{{ t('support.formHeading') }}</h3>
           <form (submit)="sendMessage($event)">
             <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" [(ngModel)]="contactForm.name" required class="input-field" placeholder="Enter your full name" />
+              <label for="name">{{ t('support.nameLabel') }}</label>
+              <input type="text" id="name" name="name" [(ngModel)]="contactForm.name" required class="input-field" placeholder="{{ t('support.namePlaceholder') }}" />
             </div>
 
             <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" [(ngModel)]="contactForm.email" required class="input-field" placeholder="name@example.com" />
+              <label for="email">{{ t('support.emailLabel') }}</label>
+              <input type="email" id="email" name="email" [(ngModel)]="contactForm.email" required class="input-field" placeholder="{{ t('support.emailPlaceholder') }}" />
             </div>
 
             <div class="form-group">
-              <label for="message">How can we help?</label>
-              <textarea id="message" name="message" [(ngModel)]="contactForm.message" required rows="5" class="input-field textarea-field" placeholder="Write your message here..."></textarea>
+              <label for="message">{{ t('support.messageLabel') }}</label>
+              <textarea id="message" name="message" [(ngModel)]="contactForm.message" required rows="5" class="input-field textarea-field" placeholder="{{ t('support.messagePlaceholder') }}"></textarea>
             </div>
 
             <button type="submit" class="btn-gold form-submit-btn">
-              Send Message <i class="fas fa-paper-plane"></i>
+              {{ t('support.submitButton') }} <i class="fas fa-paper-plane"></i>
             </button>
             
             <p *ngIf="submitStatus()" class="submit-success-msg">
-              <i class="fas fa-check-circle"></i> Message sent successfully! We will get back to you shortly.
+              <i class="fas fa-check-circle"></i> {{ t('support.submitSuccess') }}
             </p>
           </form>
         </div>
@@ -49,12 +48,12 @@ import { FormsModule } from '@angular/forms';
         <!-- Details Column -->
         <div class="details-column">
           <div class="contact-methods glass-panel">
-            <h3>Direct Contact</h3>
+            <h3>{{ t('support.directContactHeading') }}</h3>
             
             <div class="contact-item">
               <div class="contact-icon"><i class="fas fa-envelope"></i></div>
               <div>
-                <h4>Support Email</h4>
+                <h4>{{ t('support.supportEmailHeading') }}</h4>
                 <p><a href="mailto:support@numeroshastra.com" class="text-gold">support&#64;numeroshastra.com</a></p>
               </div>
             </div>
@@ -62,11 +61,11 @@ import { FormsModule } from '@angular/forms';
             <div class="contact-item">
               <div class="contact-icon"><i class="fas fa-shield-alt"></i></div>
               <div>
-                <h4>Legal & Policies</h4>
+                <h4>{{ t('support.legalHeading') }}</h4>
                 <p class="legal-links">
-                  <a href="#" (click)="$event.preventDefault()" class="text-gold">Privacy Policy</a>
+                  <a href="#" (click)="$event.preventDefault()" class="text-gold">{{ t('support.privacyPolicy') }}</a>
                   <span class="divider">|</span>
-                  <a href="#" (click)="$event.preventDefault()" class="text-gold">Terms of Service</a>
+                  <a href="#" (click)="$event.preventDefault()" class="text-gold">{{ t('support.termsOfService') }}</a>
                 </p>
               </div>
             </div>
@@ -74,9 +73,9 @@ import { FormsModule } from '@angular/forms';
 
           <!-- FAQ Accordion -->
           <div class="faq-container glass-panel">
-            <h3>Frequently Asked Questions</h3>
+            <h3>{{ t('support.faqHeading') }}</h3>
             
-            <div *ngFor="let item of faqs; let idx = index" class="faq-item" [class.open]="openFaq() === idx">
+            <div *ngFor="let item of faqs() ; let idx = index" class="faq-item" [class.open]="openFaq() === idx">
               <div class="faq-question" (click)="toggleFaq(idx)">
                 <span>{{ item.question }}</span>
                 <i class="fas" [class.fa-chevron-down]="openFaq() !== idx" [class.fa-chevron-up]="openFaq() === idx"></i>
@@ -303,6 +302,7 @@ import { FormsModule } from '@angular/forms';
   `]
 })
 export class SupportComponent {
+  readonly t = (key: string) => this.translation.t(key);
   contactForm = {
     name: '',
     email: '',
@@ -311,21 +311,9 @@ export class SupportComponent {
 
   submitStatus = signal(false);
   openFaq = signal<number | null>(0); // Default open first FAQ
+  readonly faqs = computed(() => this.translation.locale().support.faqs);
 
-  faqs = [
-    {
-      question: "How accurate is the Lo Shu Grid calculation?",
-      answer: "The calculations are 100% mathematically correct and based strictly on the classical Chinese magic square and Vedic Numerology systems. Accuracy of interpretation depends entirely on entering the correct birthdate."
-    },
-    {
-      question: "What languages is the app available in?",
-      answer: "Numero Shastra offers complete multilingual experiences in English, Hindi, and Marathi, including the unique Oracle voice narrations."
-    },
-    {
-      question: "How does the Oracle Audio Guide work?",
-      answer: "Once your report is computed, you can tap the Play icon in the app. The Oracle synthesizes your data and reads the analysis section-by-section, enabling a completely hands-free learning experience."
-    }
-  ];
+  constructor(public readonly translation: TranslationService) {}
 
   toggleFaq(idx: number) {
     if (this.openFaq() === idx) {
@@ -338,7 +326,7 @@ export class SupportComponent {
   sendMessage(event: Event) {
     event.preventDefault();
     if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) return;
-    
+
     // Simulate API request
     this.submitStatus.set(true);
     setTimeout(() => {

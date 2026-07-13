@@ -27,8 +27,8 @@
   <header class="main-header">
     <div class="nav-container">
       <a routerLink="/home" class="logo-link" (click)="closeMobileMenu()">
-        <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="Numero Shastra Logo" class="logo-img" />
-        <span class="logo-text">Numero Shastra</span>
+        <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="{{ translation.t('app.brand') }} Logo" class="logo-img" />
+        <span class="logo-text">{{ translation.t('app.brand') }}</span>
       </a>
 
       <!-- Desktop Navigation Links -->
@@ -52,15 +52,13 @@
     <!-- Mobile Navigation Overlay -->
     <div class="mobile-nav-overlay" [class.open]="isMobileMenuOpen()">
       <ul class="mobile-nav-links">
-        <li><a routerLink="/home" routerLinkActive="active-link" (click)="closeMobileMenu()">Home</a></li>
-        <li><a routerLink="/detailed-analysis" routerLinkActive="active-link" (click)="closeMobileMenu()">12 Pillars</a>
+        <li><a routerLink="/home" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.home') }}</a></li>
+        <li><a routerLink="/detailed-analysis" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.pillars') }}</a>
         </li>
-        <li><a routerLink="/oracle" routerLinkActive="active-link" (click)="closeMobileMenu()">Oracle Guide</a></li>
-        <li><a routerLink="/learning-center" routerLinkActive="active-link" (click)="closeMobileMenu()">Learning
-            Center</a></li>
-        <li><a routerLink="/testimonials" routerLinkActive="active-link" (click)="closeMobileMenu()">Community</a></li>
-        <li><a routerLink="/support-privacy" routerLinkActive="active-link" (click)="closeMobileMenu()">Support &
-            Privacy</a></li>
+        <li><a routerLink="/oracle" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.oracle') }}</a></li>
+        <li><a routerLink="/learning-center" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.learning') }}</a></li>
+        <li><a routerLink="/testimonials" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.testimonials') }}</a></li>
+        <li><a routerLink="/support-privacy" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.support') }}</a></li>
       </ul>
     </div>
   </header>
@@ -75,8 +73,8 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <a routerLink="/home" class="logo-link">
-          <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="Numero Shastra Logo" class="logo-img" />
-          <span class="logo-text">Numero Shastra</span>
+          <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="{{ translation.t('app.brand') }} Logo" class="logo-img" />
+          <span class="logo-text">{{ translation.t('app.brand') }}</span>
         </a>
         <p>
           {{ translation.t('app.footer.downloadText') }}
@@ -103,8 +101,7 @@
             target="_blank" class="store-badge">
             <i class="fab fa-google-play"></i>
             <span>
-              Get it on
-              <strong>Google Play</strong>
+              {{ translation.t('app.buttons.getItOnGooglePlay') }}
             </span>
           </a>
           <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">

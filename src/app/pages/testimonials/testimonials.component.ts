@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-testimonials',
@@ -8,15 +9,13 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="testimonials-container container">
       <div class="section-header text-center">
-        <span class="section-subtitle">User Stories</span>
-        <h1 class="section-title">Real Stories. Real <span class="text-gold">Insights.</span></h1>
-        <p class="section-desc">
-          Join thousands of users who have found clarity, alignment, and direction with Numero Shastra.
-        </p>
+        <span class="section-subtitle">{{ t('testimonials.sectionSubtitle') }}</span>
+        <h1 class="section-title">{{ t('testimonials.sectionTitle') }}</h1>
+        <p class="section-desc">{{ t('testimonials.sectionDescription') }}</p>
       </div>
 
       <div class="testimonials-grid">
-        <div *ngFor="let t of testimonials" class="testimonial-card glass-panel">
+        <div *ngFor="let t of testimonials()" class="testimonial-card glass-panel">
           <div class="stars">
             <i *ngFor="let star of [1,2,3,4,5]" class="fas fa-star text-gold"></i>
           </div>
@@ -36,14 +35,14 @@ import { CommonModule } from '@angular/common';
       <!-- App download banner -->
       <section class="cta-banner glass-panel">
         <div class="cta-content">
-          <h2>Transform Your Life Journey</h2>
-          <p>Join our growing community and download Numero Shastra on your mobile device today.</p>
+          <h2>{{ t('testimonials.ctaHeading') }}</h2>
+          <p>{{ t('testimonials.ctaText') }}</p>
           <div class="store-buttons">
             <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold">
-              <i class="fab fa-google-play"></i> Get It on Google Play
+              <i class="fab fa-google-play"></i> {{ translation.t('app.buttons.getStartedForFree') }}
             </a>
             <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
-              <i class="fas fa-globe"></i> Web App
+              <i class="fas fa-globe"></i> {{ translation.t('app.buttons.webApp') }}
             </a>
           </div>
         </div>
@@ -163,21 +162,8 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class TestimonialsComponent {
-  testimonials = [
-    {
-      quote: "The remedies for my missing numbers were so easy to follow and actually made a difference in my focus.",
-      author: "Omkar Sutar",
-      role: "Verified App User"
-    },
-    {
-      quote: "The Oracle voice feels very personal. It's like a meditation and analysis combined.",
-      author: "Priya Sharma",
-      role: "Spiritual Practitioner"
-    },
-    {
-      quote: "I finally understand why certain years were so challenging thanks to the Pinnacle analysis.",
-      author: "Amit Verma",
-      role: "Entrepreneur"
-    }
-  ];
+  readonly t = (key: string) => this.translation.t(key);
+  readonly testimonials = computed(() => this.translation.locale().testimonials.testimonials);
+
+  constructor(public readonly translation: TranslationService) {}
 }

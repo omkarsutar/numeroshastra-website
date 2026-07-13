@@ -27,34 +27,31 @@ import { TranslationService } from '../../translation.service';
         <!-- Section 2: Lo Shu Grid -->
         <div class="learning-section-card glass-panel">
           <div class="card-icon"><i class="fas fa-border-all"></i></div>
-          <h2>Understanding the Lo Shu Grid</h2>
-          <p>
-            The Lo Shu Grid is a 3x3 magic square used in Chinese Numerology. Each cell represents a different aspect of life (e.g., Wealth, Family, Knowledge, Career).
-          </p>
-          <p>
-            By placing your birthdate numbers in this grid, we reveal which areas of your life are naturally strong and which need balancing. The missing numbers represent your life lessons, and their remedies are key to unlocking your full potential.
-          </p>
+          <h2>{{ t('learning.gridTitle') }}</h2>
+          <p>{{ t('learning.gridParagraph1') }}</p>
+          <p>{{ t('learning.gridParagraph2') }}</p>
         </div>
       </div>
 
       <!-- Interactive Calculator Section -->
       <section class="calculator-section glass-panel">
         <div class="calculator-header text-center">
-          <h2 class="text-gold">Life Path Calculator</h2>
-          <p>Calculate your core Life Path Number instantly. Enter your birthdate below.</p>
+          <h2 class="text-gold">{{ t('learning.calculatorHeading') }}</h2>
+          <p>{{ t('learning.calculatorDescription') }}</p>
         </div>
 
         <div class="calculator-body">
           <div class="input-group">
-            <label for="birthdate">Date of Birth</label>
+            <label for="birthdate">{{ t('learning.birthdateLabel') }}</label>
             <input 
               type="date" 
               id="birthdate" 
               [(ngModel)]="birthdate" 
               class="birth-input" 
-              max="2100-12-31" />
+              max="2100-12-31" 
+              placeholder="{{ t('learning.birthdatePlaceholder') }}" />
             <button (click)="calculateLifePath()" class="btn-gold">
-              Calculate Path <i class="fas fa-arrow-right"></i>
+              {{ translation.t('app.buttons.calculatePath') }} <i class="fas fa-arrow-right"></i>
             </button>
           </div>
 
@@ -62,10 +59,10 @@ import { TranslationService } from '../../translation.service';
           <div *ngIf="calculationResult()" class="result-display">
             <div class="result-number-circle">
               <span class="result-num">{{ calculationResult()?.number }}</span>
-              <span class="result-lbl">Life Path</span>
+              <span class="result-lbl">{{ t('learning.resultLabel') }}</span>
             </div>
             <div class="result-text">
-              <h3>The Path of the "{{ calculationResult()?.archetype }}"</h3>
+              <h3>{{ t('learning.resultHeading').replace('{archetype}', calculationResult()?.archetype) }}</h3>
               <p>{{ calculationResult()?.description }}</p>
               <div class="traits-tags">
                 <span *ngFor="let trait of calculationResult()?.traits" class="trait-tag">
