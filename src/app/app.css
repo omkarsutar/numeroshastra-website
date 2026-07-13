@@ -6,6 +6,90 @@
   min-height: 100vh;
 }
 
+.language-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 18, 0.75);
+  backdrop-filter: blur(14px);
+}
+
+.language-dialog {
+  width: min(360px, calc(100% - 32px));
+  padding: 28px 24px;
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  display: grid;
+  gap: 20px;
+  max-width: 360px;
+}
+
+.dialog-icon {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: grid;
+  place-items: center;
+  color: var(--color-gold);
+  font-size: 1.45rem;
+}
+
+.language-dialog h2 {
+  margin: 0;
+}
+
+.dialog-subtitle {
+  color: var(--text-muted);
+  font-size: 0.98rem;
+}
+
+.language-options {
+  display: grid;
+  gap: 12px;
+}
+
+.language-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.language-option:hover,
+.language-option.selected {
+  border-color: rgba(92, 36, 179, 0.65);
+  background: rgba(92, 36, 179, 0.18);
+}
+
+.language-name {
+  font-size: 1rem;
+}
+
+.language-description {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.language-check {
+  color: var(--color-gold);
+  font-size: 1.15rem;
+}
+
 /* Header & Navigation */
 .main-header {
   position: sticky;

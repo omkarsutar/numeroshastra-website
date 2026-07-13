@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-learning',
@@ -9,24 +10,18 @@ import { FormsModule } from '@angular/forms';
   template: `
     <div class="learning-container container">
       <div class="section-header text-center">
-        <span class="section-subtitle">Numerology 101</span>
-        <h1 class="section-title">Ancient Wisdom <span class="text-gold">Unlocked</span></h1>
-        <p class="section-desc">
-          Begin your journey into the universe of numbers. Learn the fundamental core concepts that guide our analysis.
-        </p>
+        <span class="section-subtitle">{{ t('learning.sectionBadge') }}</span>
+        <h1 class="section-title">{{ t('learning.sectionTitle') }}</h1>
+        <p class="section-desc">{{ t('learning.sectionDesc') }}</p>
       </div>
 
       <div class="learning-sections-grid">
         <!-- Section 1: Life Path Number -->
         <div class="learning-section-card glass-panel">
           <div class="card-icon"><i class="fas fa-compass"></i></div>
-          <h2>What is a Life Path Number?</h2>
-          <p>
-            Your Life Path number is the most important number in your numerology chart. It reveals your soul's purpose, key strengths, potential obstacles, and the journey you are meant to take in this lifetime.
-          </p>
-          <p>
-            It is computed by adding the digits of your full birthdate (day, month, and year) and reducing the sum to a single digit, or keeping it as one of the sacred Master Numbers (11, 22, or 33).
-          </p>
+          <h2>{{ t('learning.lifePathTitle') }}</h2>
+          <p>{{ t('learning.lifePathParagraph1') }}</p>
+          <p>{{ t('learning.lifePathParagraph2') }}</p>
         </div>
 
         <!-- Section 2: Lo Shu Grid -->
@@ -285,76 +280,16 @@ import { FormsModule } from '@angular/forms';
   `]
 })
 export class LearningComponent {
+  readonly t = (key: string) => this.translation.t(key);
   birthdate: string = '';
   calculationResult = signal<any>(null);
+  readonly lifePathDatabase = computed(() => this.translation.locale().learning.lifePathDatabase);
 
-  lifePathDatabase: { [key: number]: any } = {
-    1: {
-      archetype: 'The Leader / Pioneer',
-      description: 'You are highly independent, ambitious, and original. You possess strong leadership skills and a drive to create new paths. Your journey is to master self-confidence and individuality.',
-      traits: ['Independent', 'Ambitious', 'Creative', 'Assertive', 'Determined']
-    },
-    2: {
-      archetype: 'The Peacemaker / Diplomat',
-      description: 'You are intuitive, cooperative, and highly sensitive to others. You thrive in partnerships and excel at resolving conflicts. Your journey is to find balance and practice diplomacy.',
-      traits: ['Empathetic', 'Cooperative', 'Sensitive', 'Patient', 'Supportive']
-    },
-    3: {
-      archetype: 'The Communicator / Artist',
-      description: 'You possess natural charisma, creativity, and expressive capability. You inspire others through art, speaking, or writing. Your journey is to express your feelings and spread optimism.',
-      traits: ['Creative', 'Sociable', 'Expressive', 'Optimistic', 'Charismatic']
-    },
-    4: {
-      archetype: 'The Builder / Manager',
-      description: 'You are detail-oriented, practical, organized, and reliable. You lay solid foundations and value stability. Your journey is to establish order and systematically achieve long-term goals.',
-      traits: ['Structured', 'Loyal', 'Methodical', 'Grounded', 'Hardworking']
-    },
-    5: {
-      archetype: 'The Explorer / Free Spirit',
-      description: 'You love freedom, adventure, variety, and adapting to change. You learn through hands-on experience and enjoy meeting diverse people. Your journey is to find freedom through discipline.',
-      traits: ['Adaptable', 'Adventurous', 'Curious', 'Progressive', 'Dynamic']
-    },
-    6: {
-      archetype: 'The Nurturer / Caregiver',
-      description: 'You have a deep sense of responsibility, love, and compassion. You are dedicated to family, home, and community service. Your journey is to balance helping others with self-care.',
-      traits: ['Compassionate', 'Responsible', 'Loving', 'Protective', 'Harmonious']
-    },
-    7: {
-      archetype: 'The Seeker / Analyst',
-      description: 'You are introspective, analytical, and drawn to spirituality or deep scientific truths. You seek understanding and value solitude. Your journey is to trust your intuition and seek wisdom.',
-      traits: ['Analytical', 'Intuitive', 'Spiritual', 'Reserved', 'Knowledgeable']
-    },
-    8: {
-      archetype: 'The Achiever / Powerhouse',
-      description: 'You have exceptional ambition, efficiency, and a drive for material and professional success. You understand power dynamics. Your journey is to balance material gain with spiritual integrity.',
-      traits: ['Goal-Oriented', 'Organized', 'Efficient', 'Strong-Willed', 'Practical']
-    },
-    9: {
-      archetype: 'The Humanitarian / Philosopher',
-      description: 'You are deeply compassionate, creative, and motivated by global healing and charity. You possess a broad worldview. Your journey is to learn detachment, practice forgiveness, and serve humanity.',
-      traits: ['Generous', 'Compassionate', 'Artistic', 'Idealistic', 'Universal']
-    },
-    11: {
-      archetype: 'The Intuitive Guide (Master Number)',
-      description: 'You carry a double portion of number 1 energy combined with number 2 sensitivity. You are a spiritual messenger. Your journey is to overcome nervousness and inspire others with your insight.',
-      traits: ['Inspiring', 'Highly Intuitive', 'Idealistic', 'Visionary', 'Empathetic']
-    },
-    22: {
-      archetype: 'The Master Builder (Master Number)',
-      description: 'You possess the practical skill of 4 and the visionary inspiration of 11. You can manifest large-scale ideas into physical reality. Your journey is to build things of lasting global value.',
-      traits: ['Visionary', 'Practical', 'Organized', 'Empowered', 'Constructive']
-    },
-    33: {
-      archetype: 'The Master Teacher (Master Number)',
-      description: 'You represent the ultimate form of unconditional love and spiritual service. You are dedicated to uplifting the consciousness of humanity. Your journey is to lead with compassion.',
-      traits: ['Selfless', 'Compassionate', 'Devoted', 'Wise', 'Healing']
-    }
-  };
+  constructor(public readonly translation: TranslationService) {}
 
   calculateLifePath() {
     if (!this.birthdate) return;
 
-    // Split date
     const dateParts = this.birthdate.split('-'); // YYYY-MM-DD
     if (dateParts.length !== 3) return;
 
@@ -362,7 +297,6 @@ export class LearningComponent {
     const month = dateParts[1];
     const day = dateParts[2];
 
-    // Compute sum of digits
     const sumDigits = (val: string): number => {
       return val.split('').reduce((acc, char) => acc + parseInt(char, 10), 0);
     };
@@ -373,7 +307,6 @@ export class LearningComponent {
 
     let total = ySum + mSum + dSum;
 
-    // Function to reduce to single digit except master numbers 11, 22, 33
     const reduceNum = (num: number): number => {
       while (num > 9 && num !== 11 && num !== 22 && num !== 33) {
         num = num.toString().split('').reduce((acc, char) => acc + parseInt(char, 10), 0);
@@ -383,7 +316,7 @@ export class LearningComponent {
 
     const finalNum = reduceNum(total);
 
-    const result = this.lifePathDatabase[finalNum] || {
+    const result = this.lifePathDatabase()[finalNum] || {
       archetype: 'The Mystic Seeker',
       description: 'Your life path is highly unique and holds custom destiny patterns.',
       traits: ['Unique', 'Mystical', 'Individualistic']

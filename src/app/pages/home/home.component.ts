@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-home',
@@ -11,20 +12,18 @@ import { CommonModule } from '@angular/common';
       <!-- Hero Section -->
       <section class="hero-section">
         <div class="hero-content">
-          <span class="badge">Vedic & Chinese Numerology</span>
-          <h1 class="hero-title">Unlock the Mystical Patterns of Your Life</h1>
-          <p class="hero-subtitle">
-            Discover your true purpose, hidden strengths, and future path with the power of ancient Numerology and the Lo Shu Grid.
-          </p>
+          <span class="badge">{{ t('home.heroBadge') }}</span>
+          <h1 class="hero-title">{{ t('home.heroTitle') }}</h1>
+          <p class="hero-subtitle">{{ t('home.heroSubtitle') }}</p>
           <div class="hero-actions">
             <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold pulsing-border">
-              <i class="fab fa-google-play"></i> Download App
+              <i class="fab fa-google-play"></i> {{ translation.t('app.buttons.downloadApp') }}
             </a>
             <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
-              <i class="fas fa-globe"></i> Web App
+              <i class="fas fa-globe"></i> {{ translation.t('app.buttons.webApp') }}
             </a>
             <a routerLink="/detailed-analysis" class="btn-outline">
-              Explore 12 Pillars
+              {{ translation.t('app.buttons.explorePillars') }}
             </a>
           </div>
         </div>
@@ -37,15 +36,15 @@ import { CommonModule } from '@angular/common';
       <!-- Lo Shu Grid Interactive Section -->
       <section class="grid-feature-section container">
         <div class="section-header text-center">
-          <span class="section-subtitle">Sacred Geometry</span>
-          <h2 class="section-title">The Magic of the <span class="text-gold">Lo Shu Grid</span></h2>
-          <p class="section-desc">Click on any cell of the magic square below to discover the aspect of life it governs.</p>
+          <span class="section-subtitle">{{ t('home.gridSectionSubtitle') }}</span>
+          <h2 class="section-title">{{ t('home.gridSectionTitle') }}</h2>
+          <p class="section-desc">{{ t('home.gridSectionDesc') }}</p>
         </div>
 
         <div class="grid-showcase">
           <div class="lo-shu-grid-visualizer">
             <div 
-              *ngFor="let cell of gridCells" 
+              *ngFor="let cell of gridCells()" 
               class="grid-cell" 
               [class.active]="selectedCell().number === cell.number"
               (click)="selectCell(cell)">
@@ -76,23 +75,19 @@ import { CommonModule } from '@angular/common';
       <section class="intro-section container glass-panel">
         <div class="intro-grid">
           <div class="intro-text">
-            <span class="badge">About the Companion</span>
-            <h2>More Than Just Numbers</h2>
-            <p>
-              Numero Shastra is your personal spiritual companion. Using time-tested Vedic and Lo Shu Grid principles, we provide a deep, 360-degree analysis of your birthdate to guide your career, finances, and personality growth.
-            </p>
-            <p>
-              Whether you are missing key numbers in your grid or want to align with your personal lucky vibrations, we offer personalized remedies and guidance to empower your path.
-            </p>
+            <span class="badge">{{ t('home.introBadge') }}</span>
+            <h2>{{ t('home.introHeading') }}</h2>
+            <p>{{ t('home.introParagraph1') }}</p>
+            <p>{{ t('home.introParagraph2') }}</p>
           </div>
           <div class="intro-highlight-stats">
             <div class="stat-card">
               <span class="stat-number">360°</span>
-              <span class="stat-label">Birthdate Analysis</span>
+              <span class="stat-label">{{ t('home.statBirthdateAnalysis') }}</span>
             </div>
             <div class="stat-card">
               <span class="stat-number">3+</span>
-              <span class="stat-label">Languages Supported</span>
+              <span class="stat-label">{{ t('home.statLanguagesSupported') }}</span>
             </div>
           </div>
         </div>
@@ -101,41 +96,17 @@ import { CommonModule } from '@angular/common';
       <!-- Quick Highlights -->
       <section class="highlights-section container">
         <div class="section-header text-center">
-          <span class="section-subtitle">Core Strengths</span>
-          <h2 class="section-title">Why Choose <span class="text-gold">Numero Shastra</span></h2>
+          <span class="section-subtitle">{{ t('home.highlightsTitle') }}</span>
+          <h2 class="section-title">{{ t('home.highlightsTitle') }}</h2>
         </div>
 
         <div class="highlights-grid">
-          <div class="highlight-card glass-panel">
+          <div *ngFor="let highlight of highlightCards()" class="highlight-card glass-panel">
             <div class="highlight-icon">
-              <i class="fas fa-scroll"></i>
+              <i class="fas fa-star"></i>
             </div>
-            <h3>Ancient Wisdom</h3>
-            <p>Based on the sacred Lo Shu Grid and profound Numerology principles refined over centuries.</p>
-          </div>
-
-          <div class="highlight-card glass-panel">
-            <div class="highlight-icon">
-              <i class="fas fa-volume-up"></i>
-            </div>
-            <h3>Oracle Voice</h3>
-            <p>Listen to your destiny. Receive an immersive experience with our voice narration system.</p>
-          </div>
-
-          <div class="highlight-card glass-panel">
-            <div class="highlight-icon">
-              <i class="fas fa-language"></i>
-            </div>
-            <h3>Multilingual</h3>
-            <p>Full support for English, Marathi, and Hindi, bringing the insights to your preferred language.</p>
-          </div>
-
-          <div class="highlight-card glass-panel">
-            <div class="highlight-icon">
-              <i class="fas fa-brain"></i>
-            </div>
-            <h3>Data-Driven</h3>
-            <p>Advanced calculation algorithms for high-precision personality and strength mapping.</p>
+            <h3>{{ highlight.title }}</h3>
+            <p>{{ highlight.description }}</p>
           </div>
         </div>
       </section>
@@ -510,21 +481,15 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class HomeComponent {
-  gridCells = [
-    { number: 4, title: 'Wealth & Prosperity', planet: 'Rahu (North Node)', icon: 'fas fa-coins', description: 'Governs financial growth, material wealth, organization, and practicality. It resides in the top-left quadrant of the Lo Shu Grid representing your financial capacity.', governs: 'Wealth, Assets, Practicality, discipline.' },
-    { number: 9, title: 'Fame & Reputation', planet: 'Mars', icon: 'fas fa-fire', description: 'Governs social recognition, reputation, energy, passion, and career expansion. Positioned at the top center, it represents the element of Fire.', governs: 'Fame, Passion, Ambition, recognition.' },
-    { number: 2, title: 'Love & Relationships', planet: 'Moon', icon: 'fas fa-heart', description: 'Governs partnership, marriage, relationship harmony, emotional balance, and sensitivity. Positioned in the top-right, representing Earth element.', governs: 'Love, Diplomacy, Relationships, intuition.' },
-    { number: 3, title: 'Family & Health', planet: 'Jupiter', icon: 'fas fa-tree', description: 'Governs ancestral support, health, relationships with parents, growth, and community. Positioned on the left representing Wood element.', governs: 'Growth, Health, Family relationships, expansion.' },
-    { number: 5, title: 'Stability & Balance', planet: 'Mercury', icon: 'fas fa-anchor', description: 'The center core. Governs mental balance, stability, communication, resilience, and general luck. It connects all other numbers.', governs: 'Core stability, Balance, Business acumen, communication.' },
-    { number: 7, title: 'Creativity & Children', planet: 'Ketu (South Node)', icon: 'fas fa-paint-brush', description: 'Governs creative ideas, children, legacy, introspection, and spiritual pursuits. Positioned on the right representing Metal element.', governs: 'Creative expression, Children, Intuition, analytical skills.' },
-    { number: 8, title: 'Knowledge & Wisdom', planet: 'Saturn', icon: 'fas fa-book-open', description: 'Governs spiritual insights, learning, intellect, memory, and personal growth. Positioned in the bottom-left representing Earth element.', governs: 'Education, Wisdom, Self-reflection, patience.' },
-    { number: 1, title: 'Career & Journey', planet: 'Sun', icon: 'fas fa-briefcase', description: 'Governs career opportunities, life journey, independence, ambition, and willpower. Positioned at the bottom center representing Water element.', governs: 'Career, Aspirations, Independence, planning.' },
-    { number: 6, title: 'Helpful Friends', planet: 'Venus', icon: 'fas fa-hands-helping', description: 'Governs mentorship, support from friends, travel opportunities, luxury, and aesthetics. Positioned in the bottom-right representing Metal element.', governs: 'Mentors, Support network, Travel, wealth comforts.' }
-  ];
+  readonly t = (key: string) => this.translation.t(key);
+  readonly gridCells = computed(() => this.translation.locale().home.gridCells);
+  readonly highlightCards = computed(() => this.translation.locale().home.highlightCards);
+  selectedNumber = signal(5);
+  readonly selectedCell = computed(() => this.gridCells().find(cell => cell.number === this.selectedNumber()) ?? this.gridCells()[4]);
 
-  selectedCell = signal(this.gridCells[4]); // Default to center 5
+  constructor(public readonly translation: TranslationService) {}
 
   selectCell(cell: any) {
-    this.selectedCell.set(cell);
+    this.selectedNumber.set(cell.number);
   }
 }

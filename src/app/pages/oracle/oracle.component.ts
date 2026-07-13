@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-oracle',
@@ -9,34 +10,16 @@ import { CommonModule } from '@angular/common';
     <div class="oracle-container container">
       <section class="oracle-hero">
         <div class="oracle-hero-content">
-          <span class="badge">Exclusive Feature</span>
-          <h1 class="hero-title">Meet Your <span class="text-gold">Oracle Guide</span></h1>
-          <p class="hero-subtitle">
-            Why read long reports when you can be guided? Numero Shastra features a unique <strong>Oracle Audio Narration</strong> that talks you through your analysis. It's like having a personal numerologist by your side, explaining the mysteries of your birthdate in a soothing, informative voice.
-          </p>
+          <span class="badge">{{ t('oracle.heroBadge') }}</span>
+          <h1 class="hero-title">{{ t('oracle.heroTitle') }}</h1>
+          <p class="hero-subtitle">{{ t('oracle.heroSubtitle') }}</p>
           
           <div class="oracle-bullets">
-            <div class="bullet-item">
-              <div class="bullet-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <div *ngFor="let item of translation.locale().oracle.bulletItems" class="bullet-item">
+              <div class="bullet-icon"><i class="fas fa-check-circle"></i></div>
               <div>
-                <h4>Hands-Free Insight</h4>
-                <p>Listen while you relax, commute, or reflect. Allow the wisdom to flow naturally.</p>
-              </div>
-            </div>
-
-            <div class="bullet-item">
-              <div class="bullet-icon"><i class="fas fa-globe"></i></div>
-              <div>
-                <h4>Localized Voices</h4>
-                <p>Experience the narration natively in <strong>English, Marathi, or Hindi</strong>.</p>
-              </div>
-            </div>
-
-            <div class="bullet-item">
-              <div class="bullet-icon"><i class="fas fa-route"></i></div>
-              <div>
-                <h4>Step-by-Step Guidance</h4>
-                <p>The Oracle explains every section, from your core numbers to your pinnacle stages.</p>
+                <h4>{{ item.title }}</h4>
+                <p>{{ item.description }}</p>
               </div>
             </div>
           </div>
@@ -52,11 +35,11 @@ import { CommonModule } from '@angular/common';
           <div class="audio-player-card glass-panel">
             <div class="player-top">
               <div class="pulse-indicator" [class.playing]="isPlaying()"></div>
-              <span>{{ isPlaying() ? 'Playing Reading' : 'Audio Guide Ready' }}</span>
+              <span>{{ isPlaying() ? t('oracle.playingReading') : t('oracle.audioReady') }}</span>
             </div>
-            
-            <h3 class="track-title">Your Destiny Synthesis</h3>
-            <p class="track-artist">Numero Shastra Oracle Voice</p>
+             
+            <h3 class="track-title">{{ t('oracle.trackTitle') }}</h3>
+            <p class="track-artist">{{ t('oracle.trackArtist') }}</p>
 
             <div class="language-selector">
               <button 
@@ -356,8 +339,11 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class OracleComponent {
+  readonly t = (key: string) => this.translation.t(key);
   isPlaying = signal(false);
   selectedLanguage = signal('English');
+
+  constructor(public readonly translation: TranslationService) {}
 
   togglePlay() {
     this.isPlaying.update(val => !val);

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-pillars',
@@ -8,15 +9,13 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="pillars-container container">
       <div class="section-header text-center">
-        <span class="section-subtitle">Deep Insights</span>
-        <h1 class="section-title">The 12 Core Pillars of <span class="text-gold">Destiny</span></h1>
-        <p class="section-desc">
-          Our advanced birthdate analysis covers 12 crucial facets of your life, blending traditional wisdom with scientific accuracy. Here is what is mapped out in your detailed report.
-        </p>
+        <span class="section-subtitle">{{ t('pillars.heading') }}</span>
+        <h1 class="section-title">{{ t('pillars.heading') }}</h1>
+        <p class="section-desc">{{ t('pillars.description') }}</p>
       </div>
 
       <div class="pillars-grid">
-        <div *ngFor="let pillar of pillars; let i = index" class="pillar-card glass-panel">
+        <div *ngFor="let pillar of pillars(); let i = index" class="pillar-card glass-panel">
           <div class="pillar-num">{{ i + 1 | number:'2.0-0' }}</div>
           <div class="pillar-icon">
             <i [class]="pillar.icon"></i>
@@ -28,15 +27,15 @@ import { CommonModule } from '@angular/common';
 
       <div class="pillars-footer glass-panel">
         <div class="footer-cta-content">
-          <h2 class="text-gold">Ready to explore your personal blueprint?</h2>
-          <p>Get instant access to your 12 pillars report inside the mobile app today.</p>
+          <h2 class="text-gold">{{ t('pillars.ctaHeading') }}</h2>
+          <p>{{ t('pillars.ctaText') }}</p>
         </div>
         <div class="footer-cta-action">
           <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold">
-            <i class="fab fa-google-play"></i> Get Started For Free
+            <i class="fab fa-google-play"></i> {{ translation.t('app.buttons.getStartedForFree') }}
           </a>
           <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
-            <i class="fas fa-globe"></i> Web App
+            <i class="fas fa-globe"></i> {{ translation.t('app.buttons.webApp') }}
           </a>
         </div>
       </div>
@@ -173,66 +172,8 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class PillarsComponent {
-  pillars = [
-    {
-      title: 'Detailed Lo Shu Grid Analysis',
-      icon: 'fas fa-th',
-      description: 'An ancient tool used to understand your destiny, potential, and life patterns through the placement and alignment of numbers.'
-    },
-    {
-      title: 'Career Insights',
-      icon: 'fas fa-briefcase',
-      description: 'Discover the most suitable professional paths and business sectors that align with your natural vibrations and birth numbers.'
-    },
-    {
-      title: 'Personalized Remedies',
-      icon: 'fas fa-gem',
-      description: 'Simple, practical, and highly effective remedies (like crystals, metal bracelets, and color therapy) to balance missing numbers in your grid.'
-    },
-    {
-      title: 'Advanced Personality Mapping',
-      icon: 'fas fa-user-circle',
-      description: 'Deep analytical insights into your character traits, behavior, hidden strengths, and your ruling/destiny planets.'
-    },
-    {
-      title: 'Life Path & Pinnacle Phase Guidance',
-      icon: 'fas fa-road',
-      description: 'Understand the major developmental cycles of your life, what challenges to prepare for, and your ultimate purpose.'
-    },
-    {
-      title: 'Oracle Voice Guide',
-      icon: 'fas fa-headphones-alt',
-      description: 'Don\'t just read your destiny—listen to it. High-quality audio narrations bring your reports to life with ease.'
-    },
-    {
-      title: 'Stock Market & Financial Nature',
-      icon: 'fas fa-chart-line',
-      description: 'A unique numerological perspective on your financial risk tolerance, investment temperament, and money accumulation patterns.'
-    },
-    {
-      title: 'Number Occurrence Insights',
-      icon: 'fas fa-sync-alt',
-      description: 'Learn how repeated numbers or double occurrences in your birthdate influence your energy levels, traits, and behavioral patterns.'
-    },
-    {
-      title: 'Horizontal, Vertical & Diagonal Planes',
-      icon: 'fas fa-compress-arrows-alt',
-      description: 'A complete breakdown of your Thought Plane, Will Plane, Action Plane, Success Plane, and how energy flows between them.'
-    },
-    {
-      title: 'Personalized Lucky Colors & Days',
-      icon: 'fas fa-palette',
-      description: 'Optimize your routine, business meetings, and key life decisions by aligning with your personal lucky vibrations.'
-    },
-    {
-      title: 'Personality & Life Path Synergy',
-      icon: 'fas fa-project-diagram',
-      description: 'See how your core Driver and Conductor numbers interact to form your unique life dynamic and compatibility matrices.'
-    },
-    {
-      title: 'Energy Boosters',
-      icon: 'fas fa-bolt',
-      description: 'Practical daily routines, affirmations, and meditation tips to enhance your vibrational frequency and positive aura.'
-    }
-  ];
+  readonly t = (key: string) => this.translation.t(key);
+  readonly pillars = computed(() => this.translation.locale().pillars.pillarItems);
+
+  constructor(public readonly translation: TranslationService) {}
 }
