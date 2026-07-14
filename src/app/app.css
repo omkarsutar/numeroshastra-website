@@ -271,7 +271,8 @@
   max-width: 320px;
 }
 
-.footer-links-col h4, .footer-download-col h4 {
+.footer-links-col h4,
+.footer-download-col h4 {
   font-size: 1.1rem;
   margin-bottom: 20px;
   text-transform: uppercase;
@@ -383,12 +384,15 @@
   .nav-links {
     display: none;
   }
+
   .hamburger-btn {
     display: block;
   }
+
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
+
   .footer-brand {
     grid-column: span 2;
   }
@@ -398,12 +402,15 @@
   .footer-grid {
     grid-template-columns: 1fr;
   }
+
   .footer-brand {
     grid-column: span 1;
   }
+
   .nav-container {
     height: 70px;
   }
+
   .mobile-nav-overlay {
     top: 70px;
     height: calc(100vh - 70px);
