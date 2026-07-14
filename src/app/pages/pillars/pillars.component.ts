@@ -31,7 +31,7 @@ import { TranslationService } from '../../translation.service';
           <p>{{ t('pillars.ctaText') }}</p>
         </div>
         <div class="footer-cta-action">
-          <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source=website&utm_campaign=launch_2026&utm_medium=install_button" target="_blank" class="btn-gold">
+          <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button" target="_blank" class="btn-gold">
             <i class="fab fa-google-play"></i> {{ translation.t('app.buttons.getStartedForFree') }}
           </a>
           <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
