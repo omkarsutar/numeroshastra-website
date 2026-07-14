@@ -424,16 +424,34 @@
   bottom: 0;
   z-index: 150;
   display: none;
-  gap: 10px;
-  padding: 12px 18px;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px;
+  align-items: stretch;
   justify-content: center;
   background: rgba(10, 4, 22, 0.96);
   backdrop-filter: blur(18px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.mobile-action-bar a {
+.mobile-action-note {
+  color: var(--color-gold);
+  font-size: 0.82rem;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mobile-action-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.mobile-action-buttons a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
