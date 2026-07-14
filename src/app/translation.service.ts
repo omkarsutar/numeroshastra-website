@@ -42,7 +42,7 @@ const translations: Record<LanguageCode, any> = {
         getStartedForFree: 'Get Started For Free',
         calculatePath: 'Calculate Path',
         sendMessage: 'Send Message',
-        getItOnGooglePlay: 'Get It on Google Play'
+        getItOnGooglePlay: 'Install Now'
       }
     },
     home: {
@@ -412,7 +412,7 @@ const translations: Record<LanguageCode, any> = {
         getStartedForFree: 'नि: शुल्क शुरू करें',
         calculatePath: 'पथ की गणना करें',
         sendMessage: 'संदेश भेजें',
-        getItOnGooglePlay: 'Google Play पर प्राप्त करें'
+        getItOnGooglePlay: 'Install करें'
       }
     },
     home: {
@@ -782,7 +782,7 @@ const translations: Record<LanguageCode, any> = {
         getStartedForFree: 'मुक्त सुरू करा',
         calculatePath: 'मार्गाची गणना करा',
         sendMessage: 'संदेश पाठवा',
-        getItOnGooglePlay: 'Google Play वर मिळवा'
+        getItOnGooglePlay: 'Install करा'
       }
     },
     home: {

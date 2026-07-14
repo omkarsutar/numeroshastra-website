@@ -7,12 +7,8 @@
       <h2>{{ translation.t('app.languageDialog.title') }}</h2>
       <p class="dialog-subtitle">{{ translation.t('app.languageDialog.subtitle') }}</p>
       <div class="language-options">
-        <button
-          *ngFor="let option of languageOptions"
-          type="button"
-          class="language-option"
-          [class.selected]="translation.language() === option.code"
-          (click)="selectLanguage(option.code)">
+        <button *ngFor="let option of languageOptions" type="button" class="language-option"
+          [class.selected]="translation.language() === option.code" (click)="selectLanguage(option.code)">
           <div>
             <div class="language-name">{{ option.label }}</div>
             <div class="language-description">{{ option.description }}</div>
@@ -27,7 +23,8 @@
   <header class="main-header">
     <div class="nav-container">
       <a routerLink="/home" class="logo-link" (click)="closeMobileMenu()">
-        <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="{{ translation.t('app.brand') }} Logo" class="logo-img" />
+        <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="{{ translation.t('app.brand') }} Logo"
+          class="logo-img" />
         <span class="logo-text">{{ translation.t('app.brand') }}</span>
       </a>
 
@@ -35,11 +32,15 @@
       <nav>
         <ul class="nav-links">
           <li><a routerLink="/home" routerLinkActive="active-link">{{ translation.t('app.nav.home') }}</a></li>
-          <li><a routerLink="/detailed-analysis" routerLinkActive="active-link">{{ translation.t('app.nav.pillars') }}</a></li>
+          <li><a routerLink="/detailed-analysis" routerLinkActive="active-link">{{ translation.t('app.nav.pillars')
+              }}</a></li>
           <li><a routerLink="/oracle" routerLinkActive="active-link">{{ translation.t('app.nav.oracle') }}</a></li>
-          <li><a routerLink="/learning-center" routerLinkActive="active-link">{{ translation.t('app.nav.learning') }}</a></li>
-          <li><a routerLink="/testimonials" routerLinkActive="active-link">{{ translation.t('app.nav.testimonials') }}</a></li>
-          <li><a routerLink="/support-privacy" routerLinkActive="active-link">{{ translation.t('app.nav.support') }}</a></li>
+          <li><a routerLink="/learning-center" routerLinkActive="active-link">{{ translation.t('app.nav.learning')
+              }}</a></li>
+          <li><a routerLink="/testimonials" routerLinkActive="active-link">{{ translation.t('app.nav.testimonials')
+              }}</a></li>
+          <li><a routerLink="/support-privacy" routerLinkActive="active-link">{{ translation.t('app.nav.support') }}</a>
+          </li>
         </ul>
       </nav>
 
@@ -52,13 +53,19 @@
     <!-- Mobile Navigation Overlay -->
     <div class="mobile-nav-overlay" [class.open]="isMobileMenuOpen()">
       <ul class="mobile-nav-links">
-        <li><a routerLink="/home" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.home') }}</a></li>
-        <li><a routerLink="/detailed-analysis" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.pillars') }}</a>
+        <li><a routerLink="/home" routerLinkActive="active-link" (click)="closeMobileMenu()">{{
+            translation.t('app.nav.home') }}</a></li>
+        <li><a routerLink="/detailed-analysis" routerLinkActive="active-link" (click)="closeMobileMenu()">{{
+            translation.t('app.nav.pillars') }}</a>
         </li>
-        <li><a routerLink="/oracle" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.oracle') }}</a></li>
-        <li><a routerLink="/learning-center" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.learning') }}</a></li>
-        <li><a routerLink="/testimonials" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.testimonials') }}</a></li>
-        <li><a routerLink="/support-privacy" routerLinkActive="active-link" (click)="closeMobileMenu()">{{ translation.t('app.nav.support') }}</a></li>
+        <li><a routerLink="/oracle" routerLinkActive="active-link" (click)="closeMobileMenu()">{{
+            translation.t('app.nav.oracle') }}</a></li>
+        <li><a routerLink="/learning-center" routerLinkActive="active-link" (click)="closeMobileMenu()">{{
+            translation.t('app.nav.learning') }}</a></li>
+        <li><a routerLink="/testimonials" routerLinkActive="active-link" (click)="closeMobileMenu()">{{
+            translation.t('app.nav.testimonials') }}</a></li>
+        <li><a routerLink="/support-privacy" routerLinkActive="active-link" (click)="closeMobileMenu()">{{
+            translation.t('app.nav.support') }}</a></li>
       </ul>
     </div>
   </header>
@@ -68,12 +75,25 @@
     <router-outlet></router-outlet>
   </main>
 
+  <div class="mobile-action-bar">
+    <a href="https://app.numeroshastra.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
+      <i class="fas fa-globe"></i>
+      <span>{{ translation.t('app.buttons.webApp') }}</span>
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source=website&utm_campaign=launch_2026&utm_medium=install_button"
+      target="_blank" rel="noopener noreferrer" class="btn-gold">
+      <i class="fab fa-google-play"></i>
+      <span>{{ translation.t('app.buttons.getItOnGooglePlay') }}</span>
+    </a>
+  </div>
+
   <!-- Footer -->
   <footer class="main-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
         <a routerLink="/home" class="logo-link">
-          <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="{{ translation.t('app.brand') }} Logo" class="logo-img" />
+          <img src="/logo_colorcode0511f2_512x512_Numero_Shastra.png" alt="{{ translation.t('app.brand') }} Logo"
+            class="logo-img" />
           <span class="logo-text">{{ translation.t('app.brand') }}</span>
         </a>
         <p>
@@ -97,7 +117,7 @@
         <h4>{{ translation.t('app.footer.downloadTitle') }}</h4>
         <p>{{ translation.t('app.footer.downloadText') }}</p>
         <div class="footer-download-buttons">
-          <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source%3Dwebsite%26utm_campaign%3Dlaunch_2026%26utm_medium%3Dinstall_button"
+          <a href="https://play.google.com/store/apps/details?id=com.numeroshastra.client&referrer=utm_source=website&utm_campaign=launch_2026&utm_medium=install_button"
             target="_blank" class="store-badge">
             <i class="fab fa-google-play"></i>
             <span>

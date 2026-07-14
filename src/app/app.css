@@ -401,3 +401,46 @@
     height: calc(100vh - 70px);
   }
 }
+
+.mobile-action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 150;
+  display: none;
+  gap: 10px;
+  padding: 12px 18px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 4, 22, 0.96);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-action-bar a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.mobile-action-bar .btn-gold,
+.mobile-action-bar .btn-outline {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 768px) {
+  .mobile-action-bar {
+    display: flex;
+  }
+
+  .app-shell {
+    padding-bottom: 98px;
+  }
+}
